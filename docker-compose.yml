@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  indexer-contract1:
+    build: .
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_DB_NAME=blockchain_indexer
+      - CONTRACTS_TO_PROCESS=contract1
+    depends_on:
+      - redis
+      - mongo
+
+  indexer-contract2:
+    build: .
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_DB_NAME=blockchain_indexer
+      - CONTRACTS_TO_PROCESS=contract2
+    depends_on:
+      - redis
+      - mongo
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
